@@ -1,0 +1,209 @@
+﻿<Window x:Class="task_11_bank.View.ClientView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:task_11_bank.View"  
+        xmlns:localMy="clr-namespace:task_11_bank.Tools"
+        xmlns:Sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="ClientView" Height="450" Width="800" Closing="Window_Closing" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5,1,5,1 "></Setter>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5,1,5,1 "></Setter>
+        </Style>
+        <localMy:ConverterStar x:Key="ConverterStarMy"></localMy:ConverterStar>
+        <localMy:ConverterStar x:Key="ConverterStarSerial"></localMy:ConverterStar>
+        <localMy:ConverterStar x:Key="ConverterStarNumber"></localMy:ConverterStar>
+        <Sys:Boolean  x:Key="par">True</Sys:Boolean>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ListBox ItemsSource="{Binding Clients}" IsEnabled="{Binding IsViewMode}" Grid.RowSpan="2" SelectedItem="{Binding ClientView, Mode=TwoWay}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="IsEnabled" Value="true"></Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Surname}" Margin="0,0,3,0"></TextBlock>
+                        <TextBlock Text="{Binding Name}" Margin="0,0,3,0"></TextBlock>
+                        <TextBlock Text="{Binding ThirdName}" Margin="0,0,0,0"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+
+        <StackPanel Grid.Column="2">
+            <Button Content="Exit" Command="{Binding CommandOpenAuthenticationView}" Width="40" HorizontalAlignment="Right" Margin="0,5,5,5" />
+            <Grid Height="auto" UseLayoutRounding="False" Cursor="None">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock  Grid.Row="0" Grid.Column="0"   TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
+                <TextBox  Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.Name, Mode=TwoWay}" x:Name="tbName"   IsReadOnly="{Binding EmployeeView.IsReadOnlyFIO}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Name" IsHitTestVisible="False" Background="WhiteSmoke" FontWeight="UltraLight"  Margin="7,3,7,3">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text,ElementName=tbName}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock Grid.Row="1" Grid.Column="0"  TextWrapping="Wrap" Text="Surname" VerticalAlignment="Top" />
+                <TextBox Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.Surname}" x:Name="tbSurname"  IsReadOnly="{Binding EmployeeView.IsReadOnlyFIO}"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="Surname" IsHitTestVisible="False" Background="WhiteSmoke" FontWeight="UltraLight"  Margin="7,3,7,3">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text,ElementName=tbSurname}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="0"  TextWrapping="Wrap" Text="ThirdName" VerticalAlignment="Top" />
+                <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.ThirdName}" x:Name="tbThirdName" IsReadOnly="{Binding EmployeeView.IsReadOnlyFIO}" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="Father's Name" IsHitTestVisible="False" Background="WhiteSmoke" FontWeight="UltraLight"  Margin="7,3,7,3">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text,ElementName=tbThirdName}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock Grid.Row="3" Grid.Column="0"  TextWrapping="Wrap" Text="Id Serial" VerticalAlignment="Top" />
+                <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="tbSID" IsReadOnly="{Binding Path=EmployeeView.IsPassportHidden}"  >
+                    <TextBox.Text>
+                        <MultiBinding Converter="{StaticResource ConverterStarSerial}">
+                            <Binding Path="ClientView.SID" ></Binding>
+                            <Binding Path="EmployeeView.IsPassportHidden" Mode="OneWay"></Binding>
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="Serial of Passport like 4500" IsHitTestVisible="False" Background="WhiteSmoke" FontWeight="UltraLight"  Margin="7,3,7,3">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text,ElementName=tbSID}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock Grid.Row="4" Grid.Column="0"  TextWrapping="Wrap" Text="Id Number" VerticalAlignment="Top" />
+                <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="tbNID" IsReadOnly="{Binding Path=EmployeeView.IsPassportHidden}"  >
+                    <TextBox.Text>
+                        <MultiBinding Converter="{StaticResource ConverterStarNumber}">
+                            <Binding Path="ClientView.NID" ></Binding>
+                            <Binding Path="EmployeeView.IsPassportHidden" Mode="OneWay"></Binding>
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBlock Grid.Row="4" Grid.Column="1" Text="Number of Passport like 123456" IsHitTestVisible="False" Background="WhiteSmoke" FontWeight="UltraLight"  Margin="7,3,7,3">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text,ElementName=tbNID}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock Grid.Row="5" Grid.Column="0"  TextWrapping="Wrap" Text="Phone" VerticalAlignment="Top" />
+                <TextBox Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding  Path=ClientView.Phone}" x:Name="tbPhone" />
+                <TextBlock Grid.Row="5" Grid.Column="1" Text="Phone number 89002223344" IsHitTestVisible="False" Background="WhiteSmoke" FontWeight="UltraLight"  Margin="7,3,7,3">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text,ElementName=tbPhone}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock Grid.Row="6" Grid.Column="0"  TextWrapping="Wrap"  VerticalAlignment="Top" ></TextBlock>
+                <!-- <TextBox Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding StringFormat=hi me phone is {0}, Path=ClientView.Phone, Mode=TwoWay}"-->
+                <!--  <TextBox Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.Phone, Converter={StaticResource ConverterStarMy}, ConverterParameter={StaticResource par}}" >     
+                </TextBox>
+                -->
+                <TextBox Name="XX" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" IsReadOnly="{Binding EmployeeView.IsPassportHidden}">
+                    <TextBox.Text>
+                        <MultiBinding Converter="{StaticResource ConverterStarMy}">
+                            <Binding  Path="ClientView.Phone" Mode="OneWay"></Binding>
+                            <Binding  Path="EmployeeView.IsPassportHidden" Mode="OneWay"></Binding>
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                <StackPanel Grid.Column="1" Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Left" Cursor="Arrow" Margin="63,0,0,0" Width="268">
+                    <Button Command="{Binding CommandNewClient}" Content="New" Width="50" Margin="5,1,5,1"/>
+                    <Button Command="{Binding CommandRemoveClient}" Content="Delete" Width="50" Margin="5,1,5,1"/>
+                    <Button Command="{Binding CommandSaveClient}" Content="Save" Width="50" Margin="5,1,5,1"/>
+                    <Button Command="{Binding CommandTest}" Width="50" Content="Cancel" Margin="5,1,5,1"/>
+
+                </StackPanel>
+
+
+
+            </Grid>
+
+        </StackPanel>
+        <GridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" Height="600" Margin="0,0,0,0" VerticalAlignment="Top" Width="5"/>
+        <ListView Grid.Column="2" Grid.Row="1" ItemsSource="{Binding ActionsLog }">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>
