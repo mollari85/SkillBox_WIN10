@@ -11,6 +11,8 @@ namespace task_11_bank.Models.Support
     {
         public static Employee AuthenticatedEmployee { get;set; }
 
+
+
     }
 
 }

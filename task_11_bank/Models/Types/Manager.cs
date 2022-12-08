@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using task_11_bank.Models.Types.Enum;
 
 namespace task_11_bank.Models.Types
 {
     internal class Manager:Employee
     {
-        public Manager():base(IsPassportHidden: false, IsReadOnlyFIO: false)
+        public Manager():base(IsPassportHidden: false, IsReadOnlyFIO: false, Position:Positions.Manager)
         { 
         }
     }

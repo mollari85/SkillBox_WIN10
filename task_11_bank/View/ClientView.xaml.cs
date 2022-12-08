@@ -28,6 +28,7 @@ namespace task_11_bank.View
             ClientRepository rep = new ClientRepository();
             vM_Client = new VM_Client(rep);
             this.DataContext = vM_Client;
+           
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

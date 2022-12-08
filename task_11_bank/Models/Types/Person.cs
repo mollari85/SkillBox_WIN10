@@ -12,6 +12,7 @@ namespace task_11_bank.Models.Types
     [Serializable]
     public abstract class Person : INotifyPropertyChanged
     {
+        protected Guid _guid = new Guid();
         string _surname;
         /// <summary>
         /// Person's Surname

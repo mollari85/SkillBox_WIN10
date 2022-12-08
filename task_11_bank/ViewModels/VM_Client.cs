@@ -20,10 +20,19 @@ namespace task_11_bank.ViewModels
 {
     internal class VM_Client:INotifyPropertyChanged
     {
+        private bool _editing; 
+        public ObservableCollection<LogData> ActionsLog { get; set; }
 
-        public ObservableCollection<string> ActionsLog { get; set; }
-
-       
+        private bool _isLog;
+        /// <summary>
+        /// Is Employee's actions logging
+        /// </summary>
+        public bool IsLog
+        {
+            get { return _isLog; }
+            set { if (_isLog != value) { _isLog = value; OnPropertyChanged(); } }
+        }
+ 
         /// <summary>
         /// view mode when you can only view another mode is creating user   all feild are grey
         /// </summary>
@@ -31,11 +40,11 @@ namespace task_11_bank.ViewModels
         public bool IsViewMode
         { get { return _isViewMode; } 
             set { if (_isViewMode != value) { _isViewMode = value; OnPropertyChanged(); } } }
-        public string TextLog {get;}
+
+        private Client _oldValueClientView;
         private Client _clinetView;
         public Client ClientView { get { return _clinetView; } set {  _clinetView = value; OnPropertyChanged(); } }
         public Employee Employee { get; set; }
-        
         public ObservableCollection<Client> Clients { get; set; }
         IClientRepository _clientRepository;
         public VM_Client(IClientRepository clientRepository)
@@ -43,20 +52,25 @@ namespace task_11_bank.ViewModels
             //ClientModel Model = new ClientModel();
             //ClientView = new Client();
 
-            _clientRepository = clientRepository;         
-
-            Clients=new ObservableCollection<Client>(_clientRepository.GetAll());
+            _clientRepository = clientRepository;
+            
+            Clients =new ObservableCollection<Client>(_clientRepository.GetAll());
             ClientView = Clients.FirstOrDefault();
             CommandOpenAuthenticationView = new RelayCommand(OpenAuthenticationView);
             CommandNewClient = new RelayCommand(AddClient);
             CommandRemoveClient = new RelayCommand(RemoveClient);
             CommandSaveClient= new RelayCommand(SaveClient,CanSaveClient);
-            
+            CommandEdit = new RelayCommand(Edit);
+            CommandCancel = new RelayCommand(Cancel);
+
             Employee = AuthenticatedAccount.AuthenticatedEmployee; ;
             IsViewMode = true;
+            IsLog = false;
 
-            ActionsLog=new ObservableCollection<string> {"HZ","HAHA"};
-            CommandTest = new RelayCommand(Test);
+           
+            
+            ActionsLog = new ObservableCollection<LogData>();
+            ActionsLog.Add(new LogData(Employee, LogAction.Edit, ClientView, ClientView));
         }
         public void CloseView()
         {
@@ -86,53 +100,51 @@ namespace task_11_bank.ViewModels
             {
                 MessageBox.Show($"Client: {ClientView.Surname} {ClientView.Name} {ClientView.ThirdName} is already exists");
                 return;
-            }                       
-                Clients.Add(ClientView);
-                IsViewMode = true;             
+            }   
+            if (IsLog)
+                if (_editing)
+                    ActionsLog.Add(new LogData(Employee, LogAction.Edit, _oldValueClientView, ClientView));
+                else
+                    ActionsLog.Add(new LogData(Employee, LogAction.Create, null, ClientView));
+            Clients.Add(ClientView);
+            IsViewMode = true;             
                     
         }
         public bool CanSaveClient(object obj)
         {
+            if (ClientView == null)
+                return false;
             return (ClientView.IsValidClient() ? true : false);
              
                
         }
         public void AddClient(object obj)
         {
-            IsViewMode = false;      
-             ClientView = new Client();
-
-            /*
-             Client TmpClient = new Client();
-             ClientView.Name = TmpClient.Name;
-             ClientView.Surname = TmpClient.Surname;
-             ClientView.ThirdName = TmpClient.ThirdName;
-             ClientView.Phone=TmpClient.Phone;
-             ClientView.SID = TmpClient.SID;
-             ClientView.NID = TmpClient.NID;
-            */
-
-            /*
-            _clientRepository.SaveToRepository(Clients);
-
-            NewClientView window = new NewClientView();                   
-           if (window.ShowDialog() == true)
-                Clients = new ObservableCollection<Client>(_clientRepository.GetAll());
+            IsViewMode = false;
+            if (IsLog)_oldValueClientView = null;
+            ClientView = new Client();
             
-                Clients = new ObservableCollection<Client>(_clientRepository.GetAll());
-            */
-
 
 
         }
         public void RemoveClient(object obj)
         {
+            if(IsLog) ActionsLog.Add(new LogData(Employee, LogAction.Create, ClientView, null));
             Clients.Remove(ClientView);
            // ClientView = Clients.FirstOrDefault();
         }
-        public void Test(object obj)
+        public void Cancel(object obj)
         {
-            MessageBox.Show($"check phone ={ClientView.IsPhone()} NID={ClientView.IsPassportNumber()}  SID={ClientView.IsPassportSerial()}  {ClientView.Name}   {ClientView.Surname}  =={ClientView.IsValidClient()}");
+            IsViewMode = true;
+            _editing = false;
+        }
+        public void Edit(object obj)
+        {
+            _editing = true;
+            IsViewMode = false;
+            if (IsLog)_oldValueClientView = ClientView;
+            ClientView = new Client(ClientView);
+
         }
         private RelayCommand _commandOpenAuthenticationView;
         public RelayCommand CommandOpenAuthenticationView 
@@ -168,14 +180,23 @@ namespace task_11_bank.ViewModels
             get { return _commandSaveClient ?? new RelayCommand(obj => MessageBox.Show("Button Save is not working")); }
             set { _commandSaveClient = value; }
         }
-        private RelayCommand _commandTest;
-        public RelayCommand CommandTest
+        private RelayCommand _commandCancel;
+        public RelayCommand CommandCancel
         {
             get
             {
-                return _commandTest ?? new RelayCommand(obj => MessageBox.Show("Button New is not working"));
+                return _commandCancel ?? new RelayCommand(obj => MessageBox.Show("Button Cancel is not working"));
             }
-            set { _commandTest = value; }
+            set { _commandCancel = value; }
+        }
+        private RelayCommand _commandEdit;
+        public RelayCommand CommandEdit
+        {
+            get
+            {
+                return _commandEdit ?? new RelayCommand(obj => MessageBox.Show("Button Edit is not working"));
+            }
+            set { _commandEdit = value; }
         }
 
 

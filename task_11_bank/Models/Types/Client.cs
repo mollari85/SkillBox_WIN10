@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -111,6 +112,15 @@ namespace task_11_bank.Models.Types
         public Client() 
         {
         }
+        public Client(Client tmpClient)
+        {
+            this.Name = tmpClient.Name;
+            this.Surname = tmpClient.Surname;
+            this.NID = tmpClient.NID;
+            this.SID = tmpClient.SID;
+            this.Phone=tmpClient.Phone; 
+            this.ThirdName=tmpClient.ThirdName; 
+        }
         public string this[string PropertyName]
         {
             get 
@@ -152,7 +162,22 @@ namespace task_11_bank.Models.Types
         {
             get { throw new NotImplementedException(); }
         }
-      
-       
+        public override bool Equals(object? obj)
+        {
+            if (obj is Client SeconClient)
+                if ((this.SID == SeconClient.SID) && (this.NID == SeconClient.NID) &&
+                    (this.ThirdName == SeconClient.ThirdName) && (this.Name == SeconClient.Name) && (this.Surname == SeconClient.Surname) && (this.Phone == SeconClient.Phone))
+                    return (true);
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return (this.SID+this.NID).GetHashCode();   
+        }
+        public override string ToString()
+        {
+            return new string($"Name is {Name} Surname is {Surname} ThirdName is {ThirdName} Phone is {Phone} ");
+        }
+
     }
 }

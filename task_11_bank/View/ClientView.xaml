@@ -18,6 +18,7 @@
         <localMy:ConverterStar x:Key="ConverterStarMy"></localMy:ConverterStar>
         <localMy:ConverterStar x:Key="ConverterStarSerial"></localMy:ConverterStar>
         <localMy:ConverterStar x:Key="ConverterStarNumber"></localMy:ConverterStar>
+        <localMy:ConverterBool x:Key="CoverterBool"/>
         <Sys:Boolean  x:Key="par">True</Sys:Boolean>
     </Window.Resources>
 
@@ -31,7 +32,7 @@
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding Clients}" IsEnabled="{Binding IsViewMode}" Grid.RowSpan="2" SelectedItem="{Binding ClientView, Mode=TwoWay}">
+        <ListBox Name="ListboxClients" ItemsSource="{Binding Clients}" IsEnabled="{Binding IsViewMode}"  Grid.RowSpan="2" SelectedItem="{Binding ClientView, Mode=TwoWay}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="IsEnabled" Value="true"></Setter>
@@ -51,7 +52,7 @@
 
         <StackPanel Grid.Column="2">
             <Button Content="Exit" Command="{Binding CommandOpenAuthenticationView}" Width="40" HorizontalAlignment="Right" Margin="0,5,5,5" />
-            <Grid Height="auto" UseLayoutRounding="False" Cursor="None">
+            <Grid Height="auto" UseLayoutRounding="False" Cursor="None" IsEnabled="{Binding IsViewMode, Converter={StaticResource CoverterBool}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -62,13 +63,13 @@
                     <RowDefinition Height="25"></RowDefinition>
                     <RowDefinition Height="25"></RowDefinition>
                     <RowDefinition Height="25"></RowDefinition>
-                    <RowDefinition Height="25"></RowDefinition>
+
                     <RowDefinition Height="25"></RowDefinition>
                     <RowDefinition Height="25"></RowDefinition>
                     <RowDefinition Height="25"></RowDefinition>
                 </Grid.RowDefinitions>
                 <TextBlock  Grid.Row="0" Grid.Column="0"   TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
-                <TextBox  Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.Name, Mode=TwoWay}" x:Name="tbName"   IsReadOnly="{Binding EmployeeView.IsReadOnlyFIO}" />
+                <TextBox  Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.Name, Mode=TwoWay}" x:Name="tbName"   IsReadOnly="{Binding Employee.IsReadOnlyFIO}" />
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Name" IsHitTestVisible="False" Background="WhiteSmoke" FontWeight="UltraLight"  Margin="7,3,7,3">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
@@ -83,7 +84,7 @@
                 </TextBlock>
 
                 <TextBlock Grid.Row="1" Grid.Column="0"  TextWrapping="Wrap" Text="Surname" VerticalAlignment="Top" />
-                <TextBox Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.Surname}" x:Name="tbSurname"  IsReadOnly="{Binding EmployeeView.IsReadOnlyFIO}"/>
+                <TextBox Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.Surname}" x:Name="tbSurname"  IsReadOnly="{Binding Employee.IsReadOnlyFIO}"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="Surname" IsHitTestVisible="False" Background="WhiteSmoke" FontWeight="UltraLight"  Margin="7,3,7,3">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
@@ -97,7 +98,7 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <TextBlock Grid.Row="2" Grid.Column="0"  TextWrapping="Wrap" Text="ThirdName" VerticalAlignment="Top" />
-                <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.ThirdName}" x:Name="tbThirdName" IsReadOnly="{Binding EmployeeView.IsReadOnlyFIO}" />
+                <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.ThirdName}" x:Name="tbThirdName" IsReadOnly="{Binding Employee.IsReadOnlyFIO}" />
                 <TextBlock Grid.Row="2" Grid.Column="1" Text="Father's Name" IsHitTestVisible="False" Background="WhiteSmoke" FontWeight="UltraLight"  Margin="7,3,7,3">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
@@ -112,11 +113,11 @@
                 </TextBlock>
 
                 <TextBlock Grid.Row="3" Grid.Column="0"  TextWrapping="Wrap" Text="Id Serial" VerticalAlignment="Top" />
-                <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="tbSID" IsReadOnly="{Binding Path=EmployeeView.IsPassportHidden}"  >
+                <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="tbSID" IsReadOnly="{Binding Path=Employee.IsPassportHidden}"  >
                     <TextBox.Text>
                         <MultiBinding Converter="{StaticResource ConverterStarSerial}">
                             <Binding Path="ClientView.SID" ></Binding>
-                            <Binding Path="EmployeeView.IsPassportHidden" Mode="OneWay"></Binding>
+                            <Binding Path="Employee.IsPassportHidden" Mode="OneWay"></Binding>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
@@ -134,11 +135,11 @@
                 </TextBlock>
 
                 <TextBlock Grid.Row="4" Grid.Column="0"  TextWrapping="Wrap" Text="Id Number" VerticalAlignment="Top" />
-                <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="tbNID" IsReadOnly="{Binding Path=EmployeeView.IsPassportHidden}"  >
+                <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="tbNID" IsReadOnly="{Binding Path=Employee.IsPassportHidden}"  >
                     <TextBox.Text>
                         <MultiBinding Converter="{StaticResource ConverterStarNumber}">
                             <Binding Path="ClientView.NID" ></Binding>
-                            <Binding Path="EmployeeView.IsPassportHidden" Mode="OneWay"></Binding>
+                            <Binding Path="Employee.IsPassportHidden" Mode="OneWay"></Binding>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
@@ -175,32 +176,47 @@
                 <!--  <TextBox Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" Text="{Binding Path=ClientView.Phone, Converter={StaticResource ConverterStarMy}, ConverterParameter={StaticResource par}}" >     
                 </TextBox>
                 -->
-                <TextBox Name="XX" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" IsReadOnly="{Binding EmployeeView.IsPassportHidden}">
+                <TextBox Name="XX" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" IsReadOnly="{Binding Employee.IsPassportHidden}">
                     <TextBox.Text>
                         <MultiBinding Converter="{StaticResource ConverterStarMy}">
                             <Binding  Path="ClientView.Phone" Mode="OneWay"></Binding>
-                            <Binding  Path="EmployeeView.IsPassportHidden" Mode="OneWay"></Binding>
+                            <Binding  Path="Employee.IsPassportHidden" Mode="OneWay"></Binding>
                         </MultiBinding>
+                        
                     </TextBox.Text>
+                    
                 </TextBox>
-                <StackPanel Grid.Column="1" Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Left" Cursor="Arrow" Margin="63,0,0,0" Width="268">
-                    <Button Command="{Binding CommandNewClient}" Content="New" Width="50" Margin="5,1,5,1"/>
-                    <Button Command="{Binding CommandRemoveClient}" Content="Delete" Width="50" Margin="5,1,5,1"/>
-                    <Button Command="{Binding CommandSaveClient}" Content="Save" Width="50" Margin="5,1,5,1"/>
-                    <Button Command="{Binding CommandTest}" Width="50" Content="Cancel" Margin="5,1,5,1"/>
-
-                </StackPanel>
-
-
+                
 
             </Grid>
+            <DockPanel   HorizontalAlignment="Stretch" Cursor="Arrow" Margin="0,0,0,0">
+                <StackPanel DockPanel.Dock="Bottom" Width="auto" MinHeight="25" Margin="5">
+                    <CheckBox Content="Is Logging" IsChecked="{Binding Path=IsLog}"></CheckBox>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button DockPanel.Dock="Left" Command="{Binding CommandNewClient}" IsEnabled="{Binding IsViewMode}" Content="New" Width="50" Margin="5,1,5,1"/>
+                    <Button DockPanel.Dock="Left" Command="{Binding CommandRemoveClient}" IsEnabled="{Binding IsViewMode}" Content="Delete" Width="50" Margin="5,1,5,1"/>
+                    <Button DockPanel.Dock="Left" Command="{Binding CommandEdit}" IsEnabled="{Binding IsViewMode}" Width="50" Content="Edit" Margin="5,1,5,1"/>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Width="120" HorizontalAlignment="Right">
+                    <Button DockPanel.Dock="Right" Command="{Binding CommandSaveClient}" IsEnabled="{Binding IsViewMode, Converter={StaticResource CoverterBool}}" Content="Save" Width="50" Margin="5,1,5,1"/>
+                    <Button DockPanel.Dock="Right" Command="{Binding CommandCancel}" IsEnabled="{Binding IsViewMode, Converter={StaticResource CoverterBool}}" Width="50" Content="Cancel" Margin="5,1,5,1"/>
+                </StackPanel>
+                
+
+
+            </DockPanel>
 
         </StackPanel>
         <GridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" Height="600" Margin="0,0,0,0" VerticalAlignment="Top" Width="5"/>
         <ListView Grid.Column="2" Grid.Row="1" ItemsSource="{Binding ActionsLog }">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="Data" DisplayMemberBinding="{Binding Path=DT}" Width="50"/>
+                    <GridViewColumn Header="Action" DisplayMemberBinding="{Binding Path=LogAction}" Width="50"/>
+                    <GridViewColumn Header="Who" DisplayMemberBinding="{Binding Path=WorkingEmployee}" Width="100"/>
+                    <GridViewColumn Header="Old Data" DisplayMemberBinding="{Binding Path=OldClientLog}" Width="150"/>
+                    <GridViewColumn Header="Replaced with Data" DisplayMemberBinding="{Binding Path=NewClientLog}" Width="150"/>
                 </GridView>
             </ListView.View>
         </ListView>
