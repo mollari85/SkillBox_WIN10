@@ -32,7 +32,9 @@
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ListBox Name="ListboxClients" ItemsSource="{Binding Clients}" IsEnabled="{Binding IsViewMode}"  Grid.RowSpan="2" SelectedItem="{Binding ClientView, Mode=TwoWay}">
+        <DockPanel  Grid.RowSpan="2" Height="auto" IsEnabled="{Binding IsViewMode}">
+        <ListBox DockPanel.Dock="Top" Name="ListboxClients" ItemsSource="{Binding Clients}" IsEnabled="{Binding IsViewMode}" 
+                 SelectedItem="{Binding ClientView, Mode=TwoWay}"  Height="auto" MinHeight="100">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="IsEnabled" Value="true"></Setter>
@@ -49,6 +51,11 @@
             </ListBox.ItemTemplate>
 
         </ListBox>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Height="25" MaxHeight="25" Width="auto" Margin="0" VerticalAlignment="Bottom">
+                <Button Content="Sort" Command="{Binding Path=CommandSort}" Width="60" Height="20" Margin="0,0,5,0"/>
+                <Button Content="SortDesc" Command="{Binding Path=CommandSortDesc}" Width="60" Height="20" Margin="0,0,5,0"/>
+            </StackPanel>
+        </DockPanel>
 
         <StackPanel Grid.Column="2">
             <Button Content="Exit" Command="{Binding CommandOpenAuthenticationView}" Width="40" HorizontalAlignment="Right" Margin="0,5,5,5" />

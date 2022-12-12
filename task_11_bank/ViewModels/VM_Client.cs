@@ -15,6 +15,7 @@ using task_11_bank.Models.Support;
 using System.Windows.Navigation;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Diagnostics.Metrics;
 
 namespace task_11_bank.ViewModels
 {
@@ -62,6 +63,8 @@ namespace task_11_bank.ViewModels
             CommandSaveClient= new RelayCommand(SaveClient,CanSaveClient);
             CommandEdit = new RelayCommand(Edit);
             CommandCancel = new RelayCommand(Cancel);
+            CommandSort = new RelayCommand(Sort);
+            CommandSortDesc = new RelayCommand(SortDesc);
 
             Employee = AuthenticatedAccount.AuthenticatedEmployee; ;
             IsViewMode = true;
@@ -106,7 +109,13 @@ namespace task_11_bank.ViewModels
                     ActionsLog.Add(new LogData(Employee, LogAction.Edit, _oldValueClientView, ClientView));
                 else
                     ActionsLog.Add(new LogData(Employee, LogAction.Create, null, ClientView));
-            Clients.Add(ClientView);
+            if (_editing)
+            {
+                Clients[Clients.IndexOf(_oldValueClientView)] = ClientView;
+            }
+            else
+                Clients.Add(ClientView);
+
             IsViewMode = true;             
                     
         }
@@ -140,11 +149,32 @@ namespace task_11_bank.ViewModels
         }
         public void Edit(object obj)
         {
+            if (ClientView is null)
+            {
+                MessageBox.Show("Select an item in the list");
+                return;
+            }
             _editing = true;
             IsViewMode = false;
-            if (IsLog)_oldValueClientView = ClientView;
+            _oldValueClientView = ClientView;
             ClientView = new Client(ClientView);
 
+
+        }
+        public void Sort(object obj)
+        {
+            List<Client> tmpClients = new List<Client>(Clients);
+            tmpClients.Sort();
+            for (int i = 0; i < tmpClients.Count; i++)
+                Clients.Move(Clients.IndexOf(tmpClients[i]),i);
+        }
+        public void SortDesc(object obj)
+        {
+            List<Client> tmpClients = new List<Client>(Clients);
+            tmpClients.Sort();
+            tmpClients.Reverse();
+            for (int i = 0; i < tmpClients.Count; i++)
+                Clients.Move(Clients.IndexOf(tmpClients[i]), i);
         }
         private RelayCommand _commandOpenAuthenticationView;
         public RelayCommand CommandOpenAuthenticationView 
@@ -198,6 +228,25 @@ namespace task_11_bank.ViewModels
             }
             set { _commandEdit = value; }
         }
+        private RelayCommand _commandSort;
+        public RelayCommand CommandSort
+        {
+            get
+            {
+                return _commandSort ?? new RelayCommand(obj => MessageBox.Show("Button Sort is not working"));
+            }
+            set { _commandSort = value; }
+        }
+        private RelayCommand _commandSortDesc;
+        public RelayCommand CommandSortDesc
+        {
+            get
+            {
+                return _commandSortDesc ?? new RelayCommand(obj => MessageBox.Show("Button SortDesc is not working"));
+            }
+            set { _commandSortDesc = value; }
+        }
+
 
 
 

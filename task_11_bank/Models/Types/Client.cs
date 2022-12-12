@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace task_11_bank.Models.Types
 {
     [Serializable]
-    public class Client : Person, IDataErrorInfo
+    public class Client : Person, IDataErrorInfo,ICloneable,IComparable
     {
         private int _phoneLength=11;
         private int _sIDLength = 4;
@@ -114,12 +114,14 @@ namespace task_11_bank.Models.Types
         }
         public Client(Client tmpClient)
         {
-            this.Name = tmpClient.Name;
-            this.Surname = tmpClient.Surname;
-            this.NID = tmpClient.NID;
-            this.SID = tmpClient.SID;
-            this.Phone=tmpClient.Phone; 
-            this.ThirdName=tmpClient.ThirdName; 
+            
+                this.Name = tmpClient.Name;
+                this.Surname = tmpClient.Surname;
+                this.NID = tmpClient.NID;
+                this.SID = tmpClient.SID;
+                this.Phone = tmpClient.Phone;
+                this.ThirdName = tmpClient.ThirdName;
+            
         }
         public string this[string PropertyName]
         {
@@ -179,5 +181,16 @@ namespace task_11_bank.Models.Types
             return new string($"Name is {Name} Surname is {Surname} ThirdName is {ThirdName} Phone is {Phone} ");
         }
 
+        public object Clone()
+        {
+            return new Client(Name, Surname, ThirdName, Phone, SID, NID);
+        }
+
+        public int CompareTo(object? obj)
+        {
+            if ((obj != null) && (obj is Client tmpClient))
+                return (string.Compare(this.Surname + this.Name + this.ThirdName, tmpClient.Surname + tmpClient.Name + tmpClient.ThirdName));            
+            throw new NotImplementedException();
+        }
     }
 }
