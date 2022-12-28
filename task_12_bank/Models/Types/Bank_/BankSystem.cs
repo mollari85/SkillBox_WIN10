@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Animation;
 using task_12_bank.Models.Support;
 using task_12_bank.Models.Types;
@@ -66,7 +67,19 @@ namespace task_12_bank.Models.Types.Bank_
         }
         public void DeleteAccount(Account account)
         {
-            BankAccounts.Remove(account);
+            if (account == null)
+                throw new ArgumentException("account can't be null");
+            if (!IsClient(account.PersonID))
+                throw new ArgumentException("account is not in the base");
+            Account AccountTmp = BankAccounts.FirstOrDefault(x => x == account);
+            if (AccountTmp != null)
+                if (AccountTmp.AccountGeneral == 0)
+                    BankAccounts.Remove(AccountTmp);
+                else
+                {
+                    MessageBox.Show($"Accoun has moneyt. it can't be deleted");
+                    throw new Exception($"Account {AccountTmp.AccountNumber} can't be deleted because it has not zero account ");
+                }
         }
         public bool IsClient(Client client)
         {

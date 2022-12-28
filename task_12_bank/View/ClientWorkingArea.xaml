@@ -60,8 +60,7 @@
                 <StackPanel DockPanel.Dock="Bottom">
                     <StackPanel Background="LightPink"  Orientation="Horizontal" Height="20">
                         <Button Template="{StaticResource ButtonTemplate}" Command="{Binding CommandOpenNewAccount}" Background="LightYellow" Content="New Account" Width="100" ></Button>
-                        <Button Template="{StaticResource ButtonTemplate}" Command="{Binding CommandDeleteAccount}" Background="LightYellow" Content="Close Account" Width="110" Margin="0,0,0,0" ></Button>
-
+                        <Button Template="{StaticResource ButtonTemplate}" Command="{Binding CommandDeleteAccount}" Background="LightYellow" Content="Close Account" Width="110" Margin="-20,0,0,0" ></Button>
                     </StackPanel>
                     <DockPanel x:Name="DockNewAccount" Visibility="{Binding ContainerNewAccount}" MaxHeight="200" MinHeight="200" Width="auto">
                         <DockPanel DockPanel.Dock="Bottom" x:Name="DockPanaleAccounOptionSHow">

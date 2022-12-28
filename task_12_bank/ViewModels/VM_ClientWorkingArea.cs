@@ -174,10 +174,6 @@ namespace task_12_bank.ViewModels
                     Account = new NonDepositAccount(CurrentClient.PersonID);
                     break;
             }
-
-
-
-
         }
         private void DeleteAccount(object obj)
         {
