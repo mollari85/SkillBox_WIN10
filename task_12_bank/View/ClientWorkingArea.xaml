@@ -101,8 +101,8 @@
                         <StackPanel DockPanel.Dock="left" MaxWidth="250" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Select type of Account: "></TextBlock>
-                                <ComboBox ItemsSource="{Binding Source={tools:EnumBindingSource {x:Type BankEnumType:TypeAccounts}}, FallbackValue={x:Null}}"
-                                          SelectedItem="{Binding Path=AccountType, Mode=OneWayToSource}" Text="Select type of account" Height="22" Width="130" IsSynchronizedWithCurrentItem="True"/>
+                                <ComboBox ItemsSource="{Binding Source={tools:EnumBindingSource {x:Type BankEnumType:TypeAccounts}}}"
+                                          SelectedItem="{Binding Path=AccountType, Mode=OneWayToSource}" Text="Select type of account" Height="22" Width="130" />
                             </StackPanel>
                         </StackPanel>
                     </DockPanel>
@@ -136,6 +136,7 @@
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Template="{StaticResource ButtonElipseButton}" Command="{Binding CommandRefill}"  Width="40" Height="20" Background="AliceBlue" Content="Refill" Margin="5,0"></Button>
                             <Button Template="{StaticResource ButtonElipseButton}" Command="{Binding CommandButtonWithdraw}"  Width="40" Height="20" Background="AliceBlue" Content="Take" Margin="5,0"></Button>
+                            <Button Template="{StaticResource ButtonElipseButton}" Command="{Binding CommandTranfer}"  Width="40" Height="20" Background="AliceBlue" Content="Transfer" Margin="5,0"></Button>
                         </StackPanel>
                         <StackPanel Visibility="{Binding ContainerRefill}" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal">
@@ -167,7 +168,22 @@
                                 </Button>
                             </StackPanel>
                         </StackPanel>
-
+                        <StackPanel Visibility="{Binding PanelTransactionView.ContainerTransferVisibility}" >
+                            <StackPanel >
+                                <TextBlock Text="From"></TextBlock>
+                                <ComboBox ItemsSource="{Binding CurrentClient.Accounts}" DisplayMemberPath="AccountNumber"  SelectedItem="{Binding PanelTransactionView.AccountFrom}"></ComboBox>
+                            </StackPanel>
+                            <StackPanel >
+                                <TextBlock Text="To"></TextBlock>
+                                <ComboBox ItemsSource="{Binding CurrentClient.Accounts}" DisplayMemberPath="AccountNumber" SelectedItem="{Binding PanelTransactionView.AccountTo}"></ComboBox>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Amount"></TextBlock>
+                                <TextBox Text="{Binding PanelTransactionView.AmountToTransfer}"></TextBox>
+                            </StackPanel>
+                            <Button Content="OK" Command="{Binding PanelTransactionView.CommandTransferOK}" Width="40" Margin="0,20,0,0"></Button>
+                            <ComboBox ItemsSource="{Binding TestCol}" DisplayMemberPath="Name"></ComboBox>
+                    </StackPanel>
 
 
                     </StackPanel>

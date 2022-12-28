@@ -52,7 +52,7 @@ namespace task_12_bank.Models.Types.AccountDescr
 
         public Guid PersonID {get;}
         public String Description { get; set; }
-        public Account(Guid PersonID, string AccountNumber, decimal LowLimit = 0, decimal MaxOneShotWithdraw = 0, decimal MaxDailyWithdraw = 0, decimal? MaxLimitPeriodRefill = null, int PeriodInDays = 30)
+        public Account(Guid PersonID, string AccountNumber, decimal LowLimit = 0, decimal MaxOneShotWithdraw = 0, decimal MaxDailyWithdraw = 0, decimal? MaxLimitPeriodRefill = null, int? PeriodInDays = 30)
         {
             Limit = new AccountLimits();
             this.DateStartAccount = DateOnly.FromDateTime(DateTime.Today);
@@ -67,7 +67,7 @@ namespace task_12_bank.Models.Types.AccountDescr
             this.AccountNumber = AccountNumber;
             Description = "Common Account";
         }
-        public bool WithDraw(int amount)
+        public bool WithDraw(decimal amount)
         {
             if (amount < 0)
                 throw new ArgumentOutOfRangeException("Withdraw amount can't be less or equal than zero");
@@ -152,6 +152,17 @@ namespace task_12_bank.Models.Types.AccountDescr
         {
             return (string.Compare(this.AccountNumber, account.AccountNumber));
 
+        }
+        public override bool Equals(object? obj)
+        {
+            if (obj is Account TmpAccount)
+                return (this.AccountNumber == TmpAccount.AccountNumber && this.PersonID == TmpAccount.PersonID) ? true : false;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.AccountNumber).GetHashCode();
         }
         #endregion
 

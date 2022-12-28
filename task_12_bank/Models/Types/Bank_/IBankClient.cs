@@ -13,6 +13,14 @@ namespace task_12_bank.Models.Types.Bank_
         public void DeleteAccount(Account account);
         public IEnumerable<Account> GetClientAccounts(Client client);
         public bool IsClient(Client client);
+        /// <summary>
+        /// Transfer between Clients accounts
+        /// </summary>
+        /// <param name="account1"></param>
+        /// <param name="account2"></param>
+        /// <returns></returns>
+        public bool TransferBetween(Account account1, Account account2, decimal amount);
+        public bool TransferTo(Client Client1, Account account1,Client Client2, Account account2, decimal amount);
 
         public enum TypeOfAccounts {Deposit,NonDeposit};
 

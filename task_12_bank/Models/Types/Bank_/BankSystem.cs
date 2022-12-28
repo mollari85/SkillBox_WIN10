@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 using task_12_bank.Models.Support;
 using task_12_bank.Models.Types;
 using task_12_bank.Models.Types.AccountDescr;
@@ -32,6 +33,37 @@ namespace task_12_bank.Models.Types.Bank_
 
 
         }
+        public bool TransferBetween(Account accountFrom, Account accountTo, decimal amount)
+        {
+            if (  (accountFrom == null || accountTo == null) || (accountFrom == accountTo) || (accountFrom.PersonID != accountTo.PersonID) || (amount <= 0)  )
+                return false;
+            if (!IsClient(accountFrom.PersonID))
+                return false;
+
+            Account BankAccountFrom = BankAccounts.FirstOrDefault(x => x == accountFrom);
+            Account BankAccountTo = BankAccounts.FirstOrDefault(x => x == accountTo);
+            if (BankAccountFrom == null || BankAccountTo == null)
+                return false;
+            BankAccountTo.Refill(amount);
+            BankAccountFrom.WithDraw(amount);
+            return true;
+
+        }
+        public bool TransferTo(Client ClientFrom, Account AccountFrom, Client ClientTo, Account AccountTo, decimal amount)
+        {
+            if (ClientFrom == null || ClientFrom == null || AccountTo == null || AccountFrom==null || ClientFrom.PersonID != ClientTo.PersonID || amount <= 0)
+                return false;
+            if (!IsClient(ClientTo.PersonID) || !IsClient(ClientFrom.PersonID))
+                return false;
+
+            Account BankAccountFrom = BankAccounts.FirstOrDefault(x => x == AccountFrom);
+            Account BankAccountTo = BankAccounts.FirstOrDefault(x => x == AccountTo);
+            if (BankAccountFrom == null || BankAccountTo == null)
+                return false;
+            BankAccountTo.Refill(amount);
+            BankAccountFrom.WithDraw(amount);
+            return true;
+        }
         public void DeleteAccount(Account account)
         {
             BankAccounts.Remove(account);
@@ -39,6 +71,10 @@ namespace task_12_bank.Models.Types.Bank_
         public bool IsClient(Client client)
         {
             return BankAccounts.FirstOrDefault(x => x.PersonID == client.PersonID) == null ? false : true;
+        }
+        public bool IsClient(Guid ID)
+        {
+            return BankAccounts.FirstOrDefault(x => x.PersonID == ID) == null ? false : true;
         }
         public IEnumerable<Account> GetClientAccounts(Client client)
         {

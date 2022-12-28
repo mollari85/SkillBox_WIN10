@@ -49,7 +49,7 @@ namespace task_12_bank.ViewModels
                 {
                     case TypeAccounts.Depoist:
                         Account = new DepositAccount(CurrentClient.PersonID);
-                        
+
                         break;
                     case TypeAccounts.NonDeposit:
                         Account = new NonDepositAccount(CurrentClient.PersonID);
@@ -59,7 +59,11 @@ namespace task_12_bank.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public DateOnly DateToday { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+
+        public PanelTransaction PanelTransactionView { get; set; }
+
 
         #region Support property for the View
         private Visibility _containerNewAccount = Visibility.Collapsed;
@@ -70,19 +74,15 @@ namespace task_12_bank.ViewModels
 
         private Visibility _containerWithdraw = Visibility.Collapsed;
         public Visibility ContainerWithdraw { get { return _containerWithdraw; } set { _containerWithdraw = value; OnPropertyChanged(); } }
+
+
         #endregion
 
         #region test area
-        public ObservableCollection<TestClass> ListTest = new ObservableCollection<TestClass>();
-        public ObservableCollection<TestClass> ListTestProperty { get { return (ListTest); } set { ListTest = value; } }
-        public class TestClass
-        {
-            public string Name { get; set; }
-            public TestClass() => Name = "Vasya";
-            public TestClass(string Name) => this.Name = Name;
-
-            
-            }
+        public class Test { string Name; string Surname; public Test() { Name = "Den";Surname = "Mel"; } }
+        public Test TestTest {get;set;}
+        private ObservableCollection<Test> _testCol = new ObservableCollection<Test>();
+        public ObservableCollection<Test> TestCol { get; set; }
         #endregion
         public VM_ClientWorkingArea(Client Client, IBankClient BankSystem)
         {
@@ -90,11 +90,19 @@ namespace task_12_bank.ViewModels
             this.CurrentClient = Client;
             Client.GetMyAccounts();
 
+            PanelTransactionView = new PanelTransaction(Account, BankSystem);
 
+
+           
             #region TEst area
 
             CurrentClient.Name = "ChangedDenisName";
-            
+            /*
+            TestCol.Add(new Test());
+            TestCol.Add(new Test());
+            TestCol.Add(new Test());
+
+*/
             #endregion
 
             #region Interfaces set link
@@ -110,6 +118,8 @@ namespace task_12_bank.ViewModels
             CommandWithDraw = new RelayCommand(Withdraw);
             CommandRefill = new RelayCommand(Refill);
             CommandButtonWithdraw = new RelayCommand(ButtonWithdraw);
+            CommandTranfer = new RelayCommand(Transfer);
+
             #endregion
         }
 
@@ -121,6 +131,7 @@ namespace task_12_bank.ViewModels
                 int.TryParse(sTmp, out int RefillAmount);
                 Account.Refill(RefillAmount);
             }
+            ContainerRefill = Visibility.Collapsed;
         }
         private void Withdraw(object obj)
         {
@@ -132,7 +143,8 @@ namespace task_12_bank.ViewModels
                     Account.WithDraw(WithdrawAmount);
                 }
             }
-            catch (Exception e) { MessageBox.Show(e.Message); } 
+            catch (Exception e) { MessageBox.Show(e.Message); }
+            ContainerWithdraw = Visibility.Collapsed;
         }
         private void Refill(object obj)
         {
@@ -144,12 +156,28 @@ namespace task_12_bank.ViewModels
             ContainerWithdraw = Visibility.Visible;
             ContainerRefill = Visibility.Collapsed;
         }
+        private void Transfer(object obj)
+        {
+            PanelTransactionView.ContainerTransferVisibility=Visibility.Visible;
+        }
         private void OpenNewAccount(object obj)
         {
             ContainerNewAccount = Visibility.Visible;
 
-            
-           
+            switch (AccountType)
+            {
+                case TypeAccounts.Depoist:
+                    Account = new DepositAccount(CurrentClient.PersonID);
+
+                    break;
+                case TypeAccounts.NonDeposit:
+                    Account = new NonDepositAccount(CurrentClient.PersonID);
+                    break;
+            }
+
+
+
+
         }
         private void DeleteAccount(object obj)
         {
@@ -161,10 +189,8 @@ namespace task_12_bank.ViewModels
         }
         private void OKCreateAccount(object obj)
         {
-  
-            
+
             BankSystem.CreateNewAccount(Account);
-            
             CurrentClient.GetMyAccounts();
             ContainerNewAccount = Visibility.Collapsed;
             
@@ -228,7 +254,7 @@ namespace task_12_bank.ViewModels
         {
             get
             {
-                return _commandWithDraw ?? new RelayCommand(obj => MessageBox.Show("Button OK ADD is not working"));
+                return _commandWithDraw ?? new RelayCommand(obj => MessageBox.Show("Button Withdraw is not working"));
             }
             set { _commandWithDraw = value; }
         }
@@ -238,7 +264,7 @@ namespace task_12_bank.ViewModels
         {
             get
             {
-                return _commandRefill ?? new RelayCommand(obj => MessageBox.Show("Button OK ADD is not working"));
+                return _commandRefill ?? new RelayCommand(obj => MessageBox.Show("Button Refill is not working"));
             }
             set { _commandRefill = value; }
         }
@@ -247,10 +273,21 @@ namespace task_12_bank.ViewModels
         {
             get
             {
-                return _commandButtonWithdraw ?? new RelayCommand(obj => MessageBox.Show("Button OK ADD is not working"));
+                return _commandButtonWithdraw ?? new RelayCommand(obj => MessageBox.Show("Button Withdraw is not working"));
             }
             set { _commandButtonWithdraw = value; }
         }
+        
+        RelayCommand _commandTranfer;
+        public RelayCommand CommandTranfer
+        {
+            get
+            {
+                return _commandTranfer ?? new RelayCommand(obj => MessageBox.Show("Button Transfer is not working"));
+            }
+            set { _commandTranfer = value; }
+        }
+
         #endregion
         #region tools
         public event PropertyChangedEventHandler PropertyChanged;
@@ -263,6 +300,66 @@ namespace task_12_bank.ViewModels
         #endregion
 
 
+    }
+
+    class PanelTransaction:INotifyPropertyChanged
+    {
+        IBankClient _CommunicationWithBank;
+        public Account AccountFrom { get; set; }
+        public Account AccountTo { get; set; }
+
+        private int _amountToTransfer;
+        public int AmountToTransfer
+        {
+            get { return _amountToTransfer; }
+            set { if (AccountFrom != null && AccountTo != null && value > 0 && value < AccountFrom.AccountGeneral) ; _amountToTransfer = value; OnPropertyChanged(); }
+        }
+
+        public PanelTransaction(Account account, IBankClient Bank)
+        {
+            CommandTransferOK = new RelayCommand(Transfer);
+            _CommunicationWithBank = Bank;
+            ContainerTransferVisibility = Visibility.Collapsed;
+
+        }
+        private void Transfer(object obj)
+        {
+           bool result= _CommunicationWithBank.TransferBetween(AccountFrom, AccountTo, AmountToTransfer);
+            if (result)
+            {
+                ContainerTransferVisibility = Visibility.Collapsed;
+            }
+            else
+                MessageBox.Show("There is a mistake");
+
+
+        }
+
+        private Visibility _ContainerTransferVisibility = Visibility.Collapsed;
+        public Visibility ContainerTransferVisibility { get { return _ContainerTransferVisibility; } set { _ContainerTransferVisibility = value; OnPropertyChanged(); } }
+
+        RelayCommand _commandTransferOk;
+        public RelayCommand CommandTransferOK
+        {
+            get
+            {
+                return _commandTransferOk ?? new RelayCommand(obj => MessageBox.Show("Button Transfer is not working"));
+            }
+            set { _commandTransferOk = value; }
+        }
+
+
+
+
+        #region tools
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
 }
