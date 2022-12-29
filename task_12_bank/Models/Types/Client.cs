@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics.Metrics;
@@ -8,8 +9,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using task_12_bank.Models.Support;
+using task_12_bank.Models.Types.AccountDescr;
+using task_12_bank.Models.Types.Bank_;
 
-namespace task_11_bank.Models.Types
+namespace task_12_bank.Models.Types
 {
     [Serializable]
     public class Client : Person, IDataErrorInfo,ICloneable,IComparable
@@ -21,6 +25,18 @@ namespace task_11_bank.Models.Types
         string _sID;
         string _nID;
 
+        #region working with bank
+        private IBankClient _CommunicationBank;
+        public void GetMyAccounts()
+        {
+         
+            _CommunicationBank = BankSystem.BankSber;
+            Accounts.Clear();
+            foreach(Account i in _CommunicationBank.GetClientAccounts(this))
+                    Accounts.Add(i);
+        }
+        public ObservableCollection<Account> Accounts { get; set; }
+        #endregion
         /// <summary>
         /// Person's Mobile Phone number
         /// </summary>
@@ -107,10 +123,12 @@ namespace task_11_bank.Models.Types
                 SID = sID;
                 NID = nID;
             }
+            Accounts = new ObservableCollection<Account>();
         }
         // public Client() : this("EMptyClient", "EMptyClient", "EMptyClient", "81111111111", "1111", "111111")
         public Client() 
         {
+            Accounts = new ObservableCollection<Account>();
         }
         public Client(Client tmpClient)
         {

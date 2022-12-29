@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillBox_WIN10", "SkillBox_
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "task_11_bank", "task_11_bank\task_11_bank.csproj", "{18928424-F481-4EF0-A9AA-E22AE34EE3EE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "task_12_bank", "task_12_bank\task_12_bank.csproj", "{AB09A973-B6CF-42D3-BC34-F235FEDBBF39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{18928424-F481-4EF0-A9AA-E22AE34EE3EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18928424-F481-4EF0-A9AA-E22AE34EE3EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18928424-F481-4EF0-A9AA-E22AE34EE3EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB09A973-B6CF-42D3-BC34-F235FEDBBF39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB09A973-B6CF-42D3-BC34-F235FEDBBF39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB09A973-B6CF-42D3-BC34-F235FEDBBF39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB09A973-B6CF-42D3-BC34-F235FEDBBF39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

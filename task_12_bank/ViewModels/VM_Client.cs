@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using task_11_bank.Models.Types;
-using task_11_bank.Models;
+using task_12_bank.Models.Types;
+using task_12_bank.Models;
 using System.ComponentModel.DataAnnotations;
-using task_11_bank.Models.Repository;
-using task_11_bank.Tools;
+using task_12_bank.Models.Repository;
+using task_12_bank.Tools;
 using System.Windows;
-using task_11_bank.View;
-using task_11_bank.Models.Support;
+using task_12_bank.View;
+using task_12_bank.Models.Support;
 using System.Windows.Navigation;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Diagnostics.Metrics;
 
-namespace task_11_bank.ViewModels
+namespace task_12_bank.ViewModels
 {
     internal class VM_Client:INotifyPropertyChanged
     {
@@ -46,7 +46,7 @@ namespace task_11_bank.ViewModels
         private Client _clinetView;
         public Client ClientView { get { return _clinetView; } set {  _clinetView = value; OnPropertyChanged(); } }
         public Employee Employee { get; set; }
-        public ObservableCollection<Client> Clients { get; set; }
+        public  ObservableCollection<Client> Clients { get; set; }
         IClientRepository _clientRepository;
         public VM_Client(IClientRepository clientRepository)
         {
