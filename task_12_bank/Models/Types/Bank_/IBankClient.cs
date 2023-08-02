@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using task_12_bank.Models.Types.AccountDescr;
 
+
 namespace task_12_bank.Models.Types.Bank_
 {
     public interface IBankClient
@@ -21,6 +22,8 @@ namespace task_12_bank.Models.Types.Bank_
         /// <returns></returns>
         public bool TransferBetween(Account account1, Account account2, decimal amount);
         public bool TransferTo(Client Client1, Account account1,Client Client2, Account account2, decimal amount);
+        
+        public static event Action<Guid, string, decimal, LogAction> eventNotify;
 
         public enum TypeOfAccounts {Deposit,NonDeposit};
 

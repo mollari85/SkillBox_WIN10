@@ -53,6 +53,9 @@ namespace task_12_bank.ViewModels
             if (_clientRepository.IsClient(Login))
             {
                 AuthenticatedAccount.AuthenticatedClient = _clientRepository.GetClient(Login);
+                OpenClientWorkingArea();
+                CloseThisView();
+                return;
             }
         }
 
@@ -60,6 +63,11 @@ namespace task_12_bank.ViewModels
         {
             ClientView window=new ClientView();
             window.Show();           
+        }
+        public void OpenClientWorkingArea()
+        {
+            ClientWorkingArea window = new ClientWorkingArea();
+            window.Show();
         }
         public void CloseThisView()
         {

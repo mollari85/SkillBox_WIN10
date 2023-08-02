@@ -52,8 +52,10 @@
                     <Label Content="{Binding Path=CurrentClient.Name, StringFormat='Here is customer name {0}'}"></Label>
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Exit" Command="{Binding CommandExitClient}"  Height="14" Margin="5,0" FontSize="9" ></Button>
                     <Button Content="?" Template="{StaticResource ButtonIconTemplate}" Background="pink" Height="14" Margin="5,0"></Button>
-                    <Button Content="h" Template="{StaticResource ButtonIconTemplate}" Background="LightBlue" Height="14" Margin="5,0"></Button>
+                    <Button Content="E" Template="{StaticResource ButtonIconTemplate}" Background="LightBlue" Height="14" Margin="5,0"></Button>
+                    
                 </StackPanel>
             </DockPanel>
             <DockPanel>
@@ -98,7 +100,7 @@
                             </StackPanel>
                         </DockPanel>
                         <StackPanel DockPanel.Dock="left" MaxWidth="250" HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" >
                                 <TextBlock Text="Select type of Account: "></TextBlock>
                                 <ComboBox ItemsSource="{Binding Source={tools:EnumBindingSource {x:Type BankEnumType:TypeAccounts}}}"
                                           SelectedItem="{Binding Path=AccountType, Mode=OneWayToSource}" Text="Select type of account" Height="22" Width="130" />
@@ -118,10 +120,8 @@
                       
                     </ListBox>
                     <Label Content="{Binding Path=CurrentClient.Name}"></Label>
-                    <uc:BankCardAccountView AccountName="{Binding Path=CurrentClient.Name}" Amount="{Binding Path=Account.AccountGeneral}" LastTestNumbers="99999999"></uc:BankCardAccountView>
-                    <ListBox ItemsSource="{Binding Path=CurrentClient.Accounts}" DisplayMemberPath="AccountGeneral">
+                   <uc:BankCardAccountView AccountName="{Binding Path=CurrentClient.Name}" Amount="{Binding Path=Account.AccountGeneral}" LastTestNumbers="99999999"></uc:BankCardAccountView>
 
-                    </ListBox>
                 </StackPanel>
                 <Border DockPanel.Dock="Right" Background="LightCoral">
                     <StackPanel  HorizontalAlignment="Right" MinWidth="50" MaxWidth="80" Width="60">
@@ -181,7 +181,7 @@
                                 <TextBox Text="{Binding PanelTransactionView.AmountToTransfer}"></TextBox>
                             </StackPanel>
                             <Button Content="OK" Command="{Binding PanelTransactionView.CommandTransferOK}" Width="40" Margin="0,20,0,0"></Button>
-                            <ComboBox ItemsSource="{Binding TestCol}" DisplayMemberPath="Name"></ComboBox>
+                        
                     </StackPanel>
 
 

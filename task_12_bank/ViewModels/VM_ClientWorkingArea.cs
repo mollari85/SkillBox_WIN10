@@ -17,6 +17,7 @@ using task_12_bank.Models.Types.AccountDescr;
 using task_12_bank.Models.Types.Enum;
 using System.Runtime.CompilerServices;
 using task_12_bankAccount.Model.Types;
+using task_12_bank.View;
 
 namespace task_12_bank.ViewModels
 {
@@ -82,7 +83,7 @@ namespace task_12_bank.ViewModels
         public class Test { string Name; string Surname; public Test() { Name = "Den";Surname = "Mel"; } }
         public Test TestTest {get;set;}
         private ObservableCollection<Test> _testCol = new ObservableCollection<Test>();
-        public ObservableCollection<Test> TestCol { get; set; }
+        public ObservableCollection<Test> TestCol { get ; set; }
         #endregion
         public VM_ClientWorkingArea(Client Client, IBankClient BankSystem)
         {
@@ -119,6 +120,7 @@ namespace task_12_bank.ViewModels
             CommandRefill = new RelayCommand(Refill);
             CommandButtonWithdraw = new RelayCommand(ButtonWithdraw);
             CommandTranfer = new RelayCommand(Transfer);
+            CommandExitClient = new RelayCommand(Exit);
 
             #endregion
         }
@@ -197,6 +199,19 @@ namespace task_12_bank.ViewModels
             ContainerNewAccount = Visibility.Collapsed;
             //Account
         }
+        private void Exit(object obj)
+        {
+            
+            Window window = new AuthenticationView();
+            window.Show();
+           
+            foreach (Window win in Application.Current.Windows)
+            {
+                if (win is ClientWorkingArea)
+                    win.Close();
+            }
+        }
+
         #endregion
         #region Commands
         RelayCommand _commandOpenNewAccount;
@@ -282,6 +297,15 @@ namespace task_12_bank.ViewModels
                 return _commandTranfer ?? new RelayCommand(obj => MessageBox.Show("Button Transfer is not working"));
             }
             set { _commandTranfer = value; }
+        }
+        RelayCommand _commandExitClient;
+        public RelayCommand CommandExitClient
+        {
+            get
+            {
+                return _commandExitClient ?? new RelayCommand(obj => MessageBox.Show("Button ExitClient is not working"));
+            }
+            set { _commandExitClient = value; }
         }
 
         #endregion

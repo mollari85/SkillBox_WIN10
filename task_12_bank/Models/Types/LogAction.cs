@@ -8,8 +8,17 @@ namespace task_12_bank.Models.Types
 {
     public enum LogAction
     {
-        Edit,
+        
         Create,
-        Delete
+        Delete,
+        Withdraw,
+        Refill,
+        TransferIn,
+        TransferOut,
+        Transfer,
+        ClientCreate,
+        ClientEdit,
+        ClientDelete
+        
     }
 }

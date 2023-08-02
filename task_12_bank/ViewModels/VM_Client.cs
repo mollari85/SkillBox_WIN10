@@ -16,13 +16,15 @@ using System.Windows.Navigation;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Diagnostics.Metrics;
+using task_12_bank.Models.Types.Bank_;
 
 namespace task_12_bank.ViewModels
 {
     internal class VM_Client:INotifyPropertyChanged
     {
-        private bool _editing; 
-        public ObservableCollection<LogData> ActionsLog { get; set; }
+        private bool _editing;
+        
+        public ObservableCollection<LogItem> Log { get; set; }
 
         private bool _isLog;
         /// <summary>
@@ -31,9 +33,19 @@ namespace task_12_bank.ViewModels
         public bool IsLog
         {
             get { return _isLog; }
-            set { if (_isLog != value) { _isLog = value; OnPropertyChanged(); } }
+            set { if (_isLog != value) { _isLog = value; OnIsLogChanged(value); OnPropertyChanged(); } }
         }
- 
+        public static event EventHandler? eventClientEdit;
+        public static event EventHandler? eventClientCreated;
+        public static event EventHandler? eventClientDeleted;
+        public static event EventHandler<bool> eventIsLogChanged;
+        private void  OnClientEdit(Client? OldClient, Client? NewClient) =>
+            eventClientEdit?.Invoke(this, new LogEventArgs(LogAction.ClientEdit, OldClient, NewClient,null,null));
+        private void OnClientCreated( Client? NewClient) =>
+            eventClientEdit?.Invoke(this, new LogEventArgs(LogAction.ClientCreate, null, NewClient, null, null));
+        private void OnClientDeleted(Client? DelClient) =>
+    eventClientEdit?.Invoke(this, new LogEventArgs(LogAction.ClientDelete, null, DelClient, null, null));
+        private void OnIsLogChanged(bool logStatus) => eventIsLogChanged?.Invoke(this, logStatus);
         /// <summary>
         /// view mode when you can only view another mode is creating user   all feild are grey
         /// </summary>
@@ -54,7 +66,8 @@ namespace task_12_bank.ViewModels
             //ClientView = new Client();
 
             _clientRepository = clientRepository;
-            
+            Log =new ObservableCollection<LogItem>();
+            Log = LogSystem.LogList;
             Clients =new ObservableCollection<Client>(_clientRepository.GetAll());
             ClientView = Clients.FirstOrDefault();
             CommandOpenAuthenticationView = new RelayCommand(OpenAuthenticationView);
@@ -68,12 +81,12 @@ namespace task_12_bank.ViewModels
 
             Employee = AuthenticatedAccount.AuthenticatedEmployee; ;
             IsViewMode = true;
-            IsLog = false;
+            IsLog = true;
 
            
             
-            ActionsLog = new ObservableCollection<LogData>();
-            ActionsLog.Add(new LogData(Employee, LogAction.Edit, ClientView, ClientView));
+           
+         //   ActionsLog.Add(new LogItem(Employee, LogAction.Edit, oldValue, newValue, O));
         }
         public void CloseView()
         {
@@ -103,18 +116,20 @@ namespace task_12_bank.ViewModels
             {
                 MessageBox.Show($"Client: {ClientView.Surname} {ClientView.Name} {ClientView.ThirdName} is already exists");
                 return;
-            }   
-            if (IsLog)
-                if (_editing)
-                    ActionsLog.Add(new LogData(Employee, LogAction.Edit, _oldValueClientView, ClientView));
-                else
-                    ActionsLog.Add(new LogData(Employee, LogAction.Create, null, ClientView));
+            }
+
             if (_editing)
             {
+                OnClientEdit(_oldValueClientView, ClientView);
                 Clients[Clients.IndexOf(_oldValueClientView)] = ClientView;
+                _clientRepository.SaveToRepository(Clients);               
+                _editing = false;
             }
             else
+            {
                 Clients.Add(ClientView);
+                OnClientCreated(ClientView);
+            }
 
             IsViewMode = true;             
                     
@@ -130,7 +145,7 @@ namespace task_12_bank.ViewModels
         public void AddClient(object obj)
         {
             IsViewMode = false;
-            if (IsLog)_oldValueClientView = null;
+            _oldValueClientView = null;
             ClientView = new Client();
             
 
@@ -138,8 +153,9 @@ namespace task_12_bank.ViewModels
         }
         public void RemoveClient(object obj)
         {
-            if(IsLog) ActionsLog.Add(new LogData(Employee, LogAction.Create, ClientView, null));
+            OnClientDeleted(ClientView);
             Clients.Remove(ClientView);
+
            // ClientView = Clients.FirstOrDefault();
         }
         public void Cancel(object obj)

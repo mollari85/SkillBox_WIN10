@@ -9,6 +9,7 @@ namespace task_12_bank.Models.Types.Enum
     public enum Positions
     {
         Manager,
-        Consultant
+        Consultant,
+        Client
     }
 }
