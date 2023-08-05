@@ -1,0 +1,196 @@
+﻿<Window x:Class="task_14_bank.View.ClientWorkingArea"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:task_14_bank.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:uc="clr-namespace:task_14_bank.View.UserControls"
+        xmlns:tools="clr-namespace:task_14_bank.Tools"
+        xmlns:BankEnumType="clr-namespace:task_14_bank.Models.Types.Enum"
+        mc:Ignorable="d"
+        Title="ClientWorkingArea" Height="700" Width="450">
+
+
+
+    <Window.Resources>
+        <uc:BankCardAccountView x:Key="Card"></uc:BankCardAccountView>
+        <tools:ConverterToDateOnly x:Key="DateOnly"></tools:ConverterToDateOnly>
+        <ControlTemplate x:Key="ButtonIconTemplate" TargetType="Button">
+            <Grid>
+                <Ellipse Height="14" Width="14" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding Foreground}"  />
+                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+            </Grid>
+        </ControlTemplate>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Grid>
+                <Polygon Points="0,30, 50,30, 60,0 10,0" Fill="LightYellow"  Stretch="Fill" Stroke="Cyan"  StrokeThickness="1" ></Polygon>
+                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+            </Grid>
+        </ControlTemplate>
+        <ControlTemplate x:Key="ButtonTemplate1" TargetType="Button">
+            <Border BorderBrush="Black"  BorderThickness="3">
+                <Border.LayoutTransform>
+                    <SkewTransform AngleX="-20"></SkewTransform>
+                </Border.LayoutTransform>
+                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+            </Border>
+        </ControlTemplate>
+        <ControlTemplate x:Key="ButtonElipseButton" TargetType="Button">
+            <Grid>
+                <Ellipse Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="PaleVioletRed" StrokeThickness="1" Stroke="LightBlue" ></Ellipse>
+                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+            </Grid>
+        </ControlTemplate>
+
+    </Window.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <Image Height="16" Width="16" Source="/View/pic/CompasBank.jpg" Margin="10,0,5,0 "/>
+                    <Label Content="{Binding Path=CurrentClient.Name, StringFormat='Here is customer name {0}'}"></Label>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Exit" Command="{Binding CommandExitClient}"  Height="14" Margin="5,0" FontSize="9" ></Button>
+                    <Button Content="?" Template="{StaticResource ButtonIconTemplate}" Background="pink" Height="14" Margin="5,0"></Button>
+                    <Button Content="E" Template="{StaticResource ButtonIconTemplate}" Background="LightBlue" Height="14" Margin="5,0"></Button>
+                    
+                </StackPanel>
+            </DockPanel>
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Bottom">
+                    <StackPanel Background="LightPink"  Orientation="Horizontal" Height="20">
+                        <Button Template="{StaticResource ButtonTemplate}" Command="{Binding CommandOpenNewAccount}" Background="LightYellow" Content="New Account" Width="100" ></Button>
+                        <Button Template="{StaticResource ButtonTemplate}" Command="{Binding CommandDeleteAccount}" Background="LightYellow" Content="Close Account" Width="110" Margin="-20,0,0,0" ></Button>
+                    </StackPanel>
+                    <DockPanel x:Name="DockNewAccount" Visibility="{Binding ContainerNewAccount}" MaxHeight="200" MinHeight="200" Width="auto">
+                        <DockPanel DockPanel.Dock="Bottom" x:Name="DockPanaleAccounOptionSHow">
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="OK" Command="{Binding CommandOKCreateAccount}" Margin="5,0"></Button>
+                                <Button Content="Cancel"
+                                        Command="{Binding CommandCancelCreateAccount}" Margin="5,0,10,0"></Button>
+                            </StackPanel>
+                            <StackPanel DockPanel.Dock="Left">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="Date to close the account"></TextBlock>
+                                    <DatePicker Grid.Row="0" Grid.Column="1" IsDropDownOpen="False" DisplayDateStart="{x:Static sys:DateTime.Now}" 
+                                                SelectedDate="{Binding Path=Account.DateEndAccount, Mode=OneWayToSource, Converter={StaticResource DateOnly}}"></DatePicker>
+                                    <TextBlock Grid.Row="1" Text="Low Limit"></TextBlock>
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=Account.Limit.LowLimit, Mode=TwoWay}" ></TextBox>
+                                    <TextBlock Grid.Row="2" Text="Maximum an operation withdraw"></TextBlock>
+                                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=Account.Limit.MaxOneShotWithdraw, Mode=TwoWay}"></TextBox>
+                                    <TextBlock Grid.Row="3" Text="Maximum daily withdraw"></TextBlock>
+                                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Account.Limit.MaxDailyWithdraw, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                    <TextBlock Grid.Row="4" Text="Maximum refill"></TextBlock>
+                                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=Account.Limit.MaxLimitPeriodRefill, Mode=TwoWay}"></TextBox>
+
+                                </Grid>
+                            </StackPanel>
+                        </DockPanel>
+                        <StackPanel DockPanel.Dock="left" MaxWidth="250" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="Select type of Account: "></TextBlock>
+                                <ComboBox ItemsSource="{Binding Source={tools:EnumBindingSource {x:Type BankEnumType:TypeAccounts}}}"
+                                          SelectedItem="{Binding Path=AccountType, Mode=OneWayToSource}" Text="Select type of account" Height="22" Width="130" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Left" HorizontalAlignment="Left" Margin="10">
+                   <ListBox ItemsSource="{Binding Path=CurrentClient.Accounts}" SelectedItem="{Binding Account}"> 
+
+                       <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <uc:BankCardAccountView AccountName="{Binding Description}" Amount="{Binding AccountGeneral}" LastTestNumbers="{Binding AccountNumber}"></uc:BankCardAccountView>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+
+                      
+                    </ListBox>
+                    <Label Content="{Binding Path=CurrentClient.Name}"></Label>
+                   <uc:BankCardAccountView AccountName="{Binding Path=CurrentClient.Name}" Amount="{Binding Path=Account.AccountGeneral}" LastTestNumbers="99999999"></uc:BankCardAccountView>
+
+                </StackPanel>
+                <Border DockPanel.Dock="Right" Background="LightCoral">
+                    <StackPanel  HorizontalAlignment="Right" MinWidth="50" MaxWidth="80" Width="60">
+                        <Border BorderThickness="2" BorderBrush="BlueViolet">
+                            <Label >AD here</Label>
+                        </Border>
+                    </StackPanel>
+                </Border>
+                <Border  Background="LightPink" BorderThickness="2" BorderBrush="BlanchedAlmond">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Template="{StaticResource ButtonElipseButton}" Command="{Binding CommandRefill}"  Width="40" Height="20" Background="AliceBlue" Content="Refill" Margin="5,0"></Button>
+                            <Button Template="{StaticResource ButtonElipseButton}" Command="{Binding CommandButtonWithdraw}"  Width="40" Height="20" Background="AliceBlue" Content="Take" Margin="5,0"></Button>
+                            <Button Template="{StaticResource ButtonElipseButton}" Command="{Binding CommandTranfer}"  Width="40" Height="20" Background="AliceBlue" Content="Transfer" Margin="5,0"></Button>
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding ContainerRefill}" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Account: "></TextBlock>
+                                <TextBlock Text="{Binding Account.AccountGeneral}"></TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Account.AccountNumber}"></TextBlock>
+                            <StackPanel x:Name="stakcSum" Orientation="Horizontal">
+                                <TextBox x:Name="TxtSum"  Width="50"> </TextBox>
+                                <Button x:Name="OKAdd" Template="{StaticResource ButtonElipseButton}" Command="{Binding CommandOKAdd}" CommandParameter="{Binding ElementName=TxtSum, Path=Text}" Width="20" Height="20">
+                                    <Button.Content>
+                                        <StackPanel>
+                                            <Image Source="/View/pic/OK2.png" Margin="4" IsHitTestVisible="False" Visibility="Visible" Panel.ZIndex="2"></Image>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel x:Name="StackWithdraw" Visibility="{Binding ContainerWithdraw}" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding Account.AccountGeneral}"></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="TxtWithdraw"  Width="50"></TextBox>
+                                <Button x:Name="Withdraw" Template="{StaticResource ButtonElipseButton}" Command="{Binding CommandWithDraw}" CommandParameter="{Binding ElementName=TxtWithdraw, Path=Text}" Width="20" Height="20">
+                                    <Button.Content>
+                                        <StackPanel>
+                                            <Image Source="/View/pic/OK.png" Margin="4" Panel.ZIndex="1"></Image>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding PanelTransactionView.ContainerTransferVisibility}" >
+                            <StackPanel >
+                                <TextBlock Text="From"></TextBlock>
+                                <ComboBox ItemsSource="{Binding CurrentClient.Accounts}" DisplayMemberPath="AccountNumber"  SelectedItem="{Binding PanelTransactionView.AccountFrom}"></ComboBox>
+                            </StackPanel>
+                            <StackPanel >
+                                <TextBlock Text="To"></TextBlock>
+                                <ComboBox ItemsSource="{Binding CurrentClient.Accounts}" DisplayMemberPath="AccountNumber" SelectedItem="{Binding PanelTransactionView.AccountTo}"></ComboBox>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Amount"></TextBlock>
+                                <TextBox Text="{Binding PanelTransactionView.AmountToTransfer}"></TextBox>
+                            </StackPanel>
+                            <Button Content="OK" Command="{Binding PanelTransactionView.CommandTransferOK}" Width="40" Margin="0,20,0,0"></Button>
+                        
+                    </StackPanel>
+
+
+                    </StackPanel>
+                </Border>
+
+            </DockPanel>
+
+        </StackPanel>
+    </DockPanel>
+
+</Window>

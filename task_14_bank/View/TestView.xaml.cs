@@ -11,10 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using task_12_bank.Models.Types;
+using task_14_bank.Models.Types;
 
-
-namespace task_12_bank.View
+namespace task_14_bank.View
 {
     /// <summary>
     /// Interaction logic for TestView.xaml

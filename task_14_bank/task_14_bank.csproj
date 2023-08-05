@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Tools\NotUseUserControlArchive_\CompasBank.jpg" />
+    <None Remove="View\pic\OK.png" />
+    <None Remove="View\pic\OK2.png" />
+    <None Remove="View\UserControls\CompasBank.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="View\pic\OK.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="View\pic\OK2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Account\Account.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Tools\NotUseUserControlArchive_\CompasBank.jpg" />
+    <Resource Include="View\UserControls\CompasBank.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Tools\NotUseUserControlArchive_\BankCardAccountView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Tools\NotUseUserControlArchive_\BankCardAccountView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>
