@@ -1,0 +1,104 @@
+﻿<Window x:Class="database_connection.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:database_connection"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <ControlTemplate TargetType="Button" x:Key="btTemplate">
+            <Border BorderBrush="Orange"  BorderThickness="2" CornerRadius="15" Height="30" Margin="10 0 0 15">
+                <ContentControl Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14"></ContentControl>
+            </Border>
+    
+        </ControlTemplate>
+        <Style x:Key="ButtonTab">
+            <!--  <Setter Property="Margin" Value="10,10,10,10"></Setter> 
+            <Setter>
+                <Setter.Value>
+                    <SolidColorBrush Color="Azure">
+                        
+                    </SolidColorBrush>
+                </Setter.Value>
+            </Setter>  -->
+            <Setter Property="ItemsControl.Background" Value="Aqua"></Setter>
+            <Setter Property="ItemsControl.Margin" Value="0,0,10,0"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="Red"></Setter>
+            
+        </Style>
+    </Window.Resources>
+    <DockPanel Name="MainDock">
+        <StackPanel DockPanel.Dock="top" MinHeight="50">
+            
+        </StackPanel>
+        <StackPanel DockPanel.Dock="left" Width="auto">
+            <StackPanel>
+                <Button Name="ConnectionAccessDb" Template="{StaticResource btTemplate}" Command="{Binding CommandConnectionAccess}"   Content="Connection Client" ></Button>
+                <Button Template="{StaticResource btTemplate}" Content="Connection Good" Command="{Binding CommandConnectionSQL}" ></Button> 
+            </StackPanel>
+           
+        </StackPanel>
+        <DockPanel  Margin=" 10 0 10 30">
+        <TabControl  DockPanel.Dock="Top" VerticalAlignment="Stretch" MinHeight="300">
+            <TabItem Name="tableTab" IsSelected="{Binding TabSelectedClient}">
+                <TabItem.Header>
+                    <TextBlock Text="Clients"> </TextBlock>
+                </TabItem.Header>
+                    <StackPanel>
+                    <DataGrid x:Name="MyGrid" ItemsSource="{Binding dbClient}" SelectedItem="{Binding SelectedClient}"  RowHeight="30" MinHeight="280">
+                    <DataGrid.Columns>
+                       <!-- <DataGridTextColumn Header=" ID" Binding="{Binding ID}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Name" Binding="{Binding Name}"></DataGridTextColumn>
+                        -->
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+                            <Button Style="{StaticResource ButtonTab}" Content="ViewResult" Command="{Binding CommandView }"  Margin="0,0,80,0"></Button>
+                            <Button Style="{StaticResource ButtonTab}" Content="Create" Command="{Binding CommandCreate }"></Button>
+                            <Button Style="{StaticResource ButtonTab}" Content="Update" Command="{Binding CommandUpdate }"></Button>
+                            <Button Style="{StaticResource ButtonTab}" Content="Delete" Command="{Binding CommandDelete }"></Button>
+
+                            
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+            <TabItem IsSelected="{Binding TabSelectedGood, Mode=TwoWay}">
+                
+                <TabItem.Header>
+                    <TextBlock Text="Goods"></TextBlock>
+                </TabItem.Header>
+                    <StackPanel VerticalAlignment="Stretch">
+                    <DataGrid x:Name="MyGridGoods" ItemsSource="{Binding dbGood}" SelectedItem="{Binding SelectedGood}"  RowHeight="30" MinHeight="280">
+                        <DataGrid.Columns>
+                        <!--     <DataGridTextColumn Header=" ID" Binding="{Binding ID}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Name" Binding="{Binding Name}"></DataGridTextColumn>
+                        -->
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource ButtonTab}" Content="Create" Command="{Binding CommandCreateGood }"></Button>
+                        <Button Style="{StaticResource ButtonTab}" Content="Update" Command="{Binding CommandUpdateGood }"></Button>
+                        <Button Style="{StaticResource ButtonTab}" Content="Delete" Command="{Binding CommandDeleteGood }"></Button>
+                    </StackPanel>
+                    </StackPanel>
+                </TabItem>
+                <TabItem IsSelected="{Binding TabSelectedView, Mode=TwoWay}" >
+                    <TabItem.Header>
+                        View
+                    </TabItem.Header>
+                    <DataGrid x:Name="MYDataGrid" ItemsSource="{Binding dbClientGood}">
+                        <DataGrid.Columns>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+           
+        </DockPanel>
+    </DockPanel>
+</Window>

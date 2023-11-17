@@ -1,0 +1,48 @@
+﻿<Window x:Class="database_connection.View.ClientView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:database_connection.View"
+        mc:Ignorable="d"
+        Title="ClientView" Height="250" Width="350">
+    <Window.Resources>
+        <Style x:Key="ButtonClient">
+            <Setter Property="ItemsControl.Margin" Value="0,0,10,10"></Setter>
+            <Setter Property="ItemsControl.MinWidth" Value="60"></Setter>
+        </Style>
+        <Style x:Key="TextBlock">
+            <Setter Property="ItemsControl.Margin" Value="10,0,0,10"></Setter>
+        </Style>
+        <Style x:Key="TextBox">
+            <Setter Property="ItemsControl.Margin" Value="0,0,10,10"></Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource ResourceKey=ButtonClient}" Content="Ok" Command="{Binding CommandOk}"></Button>
+            <Button Style="{StaticResource ResourceKey=ButtonClient}" Content="Cancel" Command="{Binding CommandCancel}"></Button>
+        </StackPanel>
+        <StackPanel  Width="100">
+            <TextBlock Style="{StaticResource ResourceKey=TextBlock}"> Name</TextBlock>
+            <TextBlock Style="{StaticResource ResourceKey=TextBlock}"> Surname</TextBlock>
+            <TextBlock Style="{StaticResource ResourceKey=TextBlock}"> SecondName</TextBlock>
+            <TextBlock Style="{StaticResource ResourceKey=TextBlock}"> PhoneNumber</TextBlock>
+            <TextBlock Style="{StaticResource ResourceKey=TextBlock}"> Mail</TextBlock>
+        </StackPanel>
+        <StackPanel  Width="200">
+            <TextBox Style="{StaticResource ResourceKey=TextBox}" Text="{Binding Client.Name}"></TextBox>
+            <TextBox Style="{StaticResource ResourceKey=TextBox}" Text="{Binding Client.Surname}"></TextBox>
+            <TextBox Style="{StaticResource ResourceKey=TextBox}" Text="{Binding Client.SecondName}"></TextBox>
+            <TextBox Style="{StaticResource ResourceKey=TextBox}" Text="{Binding Client.PhoneNumber}"></TextBox>
+            <TextBox Style="{StaticResource ResourceKey=TextBox}" Text="{Binding Client.Mail}"></TextBox>
+        </StackPanel>
+
+
+        
+            
+      
+        
+    </DockPanel>
+</Window>
